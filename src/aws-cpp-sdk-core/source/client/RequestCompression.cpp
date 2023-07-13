@@ -156,7 +156,7 @@ iostream_outcome Aws::Client::RequestCompression::compress(std::shared_ptr<Aws::
                 }
             }
             streamSize -= toRead; //left to read
-            strm.avail_in = (flush == Z_FINISH)?toRead-1:toRead; //skip EOF if included
+            strm.avail_in = (flush == Z_FINISH)? uInt(toRead-size_t(1)) : uInt(toRead); //skip EOF if included
             strm.next_in = in.get();
             do
             {
@@ -277,7 +277,7 @@ Aws::Client::RequestCompression::uncompress(std::shared_ptr<Aws::IOStream> input
             }
 
             // Filling input buffer to decompress
-            strm.avail_in = toRead;
+            strm.avail_in = uInt(toRead);
             strm.next_in = in.get();
             do
             {
